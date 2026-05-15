@@ -1,0 +1,8 @@
+venv/
+.env
+__pycache__/
+*.pyc
+output/
+assets/album_art.jpg
+models/
+.vscode/

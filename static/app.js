@@ -1,7 +1,11 @@
+document.body.classList.add('intro-active')
 // ── SOUND FILES ──
 const bootSound    = new Audio('/static/sounds/boot.mp3')
 const channelSound = new Audio('/static/sounds/channel.mp3')
 const staticSound  = new Audio('/static/sounds/static.mp3')
+
+staticSound.loop   = true
+staticSound.volume = 0.08
 
 function unlockAudio() {
     staticSound.play().then(() => staticSound.pause()).catch(() => {})
@@ -9,20 +13,38 @@ function unlockAudio() {
 }
 document.addEventListener('click', unlockAudio, { once: true })
 
-staticSound.loop   = true
-staticSound.volume = 0.08
+// ── PIXEL SWORD CURSOR ──
+const swordCursor = document.getElementById('cursor')
+
+document.addEventListener('mousemove', (e) => {
+    const x = Math.round(e.clientX)
+    const y = Math.round(e.clientY)
+    swordCursor.style.setProperty('--mouse-x', `${x}px`)
+    swordCursor.style.setProperty('--mouse-y', `${y}px`)
+    swordCursor.style.transform = `translate3d(${x}px, ${y}px, 0)`
+})
+
+document.addEventListener('mousedown', (e) => {
+    if (e.button === 0) {
+        swordCursor.classList.add('tebas')
+        setTimeout(() => {
+            swordCursor.classList.remove('tebas')
+            const x = getComputedStyle(swordCursor).getPropertyValue('--mouse-x')
+            const y = getComputedStyle(swordCursor).getPropertyValue('--mouse-y')
+            swordCursor.style.transform = `translate3d(${x}, ${y}, 0)`
+        }, 250)
+    }
+})
+
+document.addEventListener('contextmenu', e => e.preventDefault())
 
 // ── INTRO SEQUENCE ──
-const introScreen  = document.getElementById('intro-screen')
-const introStatus  = document.getElementById('intro-status')
+const introScreen   = document.getElementById('intro-screen')
+const introStatus   = document.getElementById('intro-status')
 const introProgress = document.getElementById('intro-progress')
-const introProgressBar = document.getElementById('intro-progress-bar')
-const introHint    = document.getElementById('intro-hint')
-const mainContent  = document.getElementById('main-content')
+const introHint     = document.getElementById('intro-hint')
 
 let introStarted = false
-
-// second clack timestamp in ms — tuned
 const SECOND_CLACK_MS = 3200
 
 document.addEventListener('click', startIntro, { once: true })
@@ -32,20 +54,16 @@ function startIntro() {
     if (introStarted) return
     introStarted = true
 
-    // play boot sound
     bootSound.volume = 1.0
     bootSound.play()
 
-    // hide hint
     introHint.style.display = 'none'
-
-    // start shaking and show initializing
     introStatus.textContent = 'INITIALIZING...'
     introScreen.classList.add('shake')
 
-    // build 16 blocks
+    // build 16 pixel blocks
     const progressInner = document.getElementById('intro-progress-inner')
-    const TOTAL_BLOCKS = 16
+    const TOTAL_BLOCKS  = 16
     for (let i = 0; i < TOTAL_BLOCKS; i++) {
         const block = document.createElement('div')
         block.classList.add('progress-block')
@@ -55,7 +73,6 @@ function startIntro() {
 
     introProgress.style.display = 'flex'
 
-    // fill blocks one by one over SECOND_CLACK_MS
     let currentBlock = 0
     const blockInterval = SECOND_CLACK_MS / TOTAL_BLOCKS
     const blockTimer = setInterval(() => {
@@ -67,7 +84,6 @@ function startIntro() {
         }
     }, blockInterval)
 
-    // when second clack hits — stop shake, load main site
     setTimeout(() => {
         introScreen.classList.remove('shake')
         introStatus.textContent = 'SIGNAL ACQUIRED'
@@ -78,12 +94,14 @@ function startIntro() {
 
             setTimeout(() => {
                 introScreen.style.display = 'none'
-                mainContent.classList.add('visible')
+                document.documentElement.style.overflow = 'auto'
+                document.body.classList.remove('intro-active')
+                window.scrollTo({ top: 0, behavior: 'instant' })
+                // fade in static
                 staticSound.currentTime = 0
-                staticSound.volume = 0
+                staticSound.volume      = 0
                 staticSound.play()
 
-                // fade in static over 2 seconds
                 let staticVol = 0
                 const staticFade = setInterval(() => {
                     staticVol += 0.01
@@ -94,10 +112,9 @@ function startIntro() {
                         staticSound.volume = staticVol
                     }
                 }, 80)
+
             }, 500)
-
         }, 400)
-
     }, SECOND_CLACK_MS)
 }
 
@@ -120,65 +137,26 @@ const tryAnother       = document.getElementById('try-another')
 const idCard           = document.getElementById('id-card')
 const idShimmer        = document.getElementById('id-shimmer')
 
-// ── CUSTOM CURSOR ──
-const cursor    = document.createElement('div')
-const cursorDot = document.createElement('div')
-cursor.classList.add('custom-cursor')
-cursorDot.classList.add('cursor-dot')
-document.body.appendChild(cursor)
-document.body.appendChild(cursorDot)
-
-let mouseX = 0, mouseY = 0
-let dotX = 0,   dotY = 0
-
-document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX
-    mouseY = e.clientY
-    cursor.style.left = mouseX + 'px'
-    cursor.style.top  = mouseY + 'px'
-})
-
-// dot follows with lag
-function animateDot() {
-    dotX += (mouseX - dotX) * 0.15
-    dotY += (mouseY - dotY) * 0.15
-    cursorDot.style.left = dotX + 'px'
-    cursorDot.style.top  = dotY + 'px'
-    requestAnimationFrame(animateDot)
-}
-animateDot()
-
-// cursor grows on hoverable elements
-document.querySelectorAll('button, input, a').forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.classList.add('hovering'))
-    el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'))
-})
-
 // ── ID CARD 3D TILT ──
 idCard.addEventListener('mousemove', (e) => {
-    const rect   = idCard.getBoundingClientRect()
+    const rect    = idCard.getBoundingClientRect()
     const centerX = rect.left + rect.width  / 2
     const centerY = rect.top  + rect.height / 2
     const rotateX = ((e.clientY - centerY) / rect.height) * -12
     const rotateY = ((e.clientX - centerX) / rect.width)  *  12
-
     idCard.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`
-
-    // shimmer follows cursor
     const x = ((e.clientX - rect.left) / rect.width)  * 100
     const y = ((e.clientY - rect.top)  / rect.height) * 100
-    idShimmer.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(201,168,76,0.10) 0%, transparent 55%)`
+    idShimmer.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(245,227,214,0.10) 0%, transparent 55%)`
 })
 
 idCard.addEventListener('mouseleave', () => {
     idCard.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)'
-    idShimmer.style.background = `radial-gradient(circle at 50% 50%, rgba(201,168,76,0.06) 0%, transparent 60%)`
+    idShimmer.style.background = `radial-gradient(circle at 50% 50%, rgba(245,227,214,0.06) 0%, transparent 60%)`
 })
-
 
 // ── STATE ──
 let isLoading = false
-
 
 // ── HELPERS ──
 function showSection(section) {
@@ -194,7 +172,7 @@ function resetToSearch() {
     loading.classList.remove('visible')
     errorBox.classList.remove('visible')
     result.classList.remove('visible')
-    songInput.value = ''
+    songInput.value  = ''
     artistInput.value = ''
     songInput.focus()
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -209,8 +187,7 @@ function formatScore(score) {
     return `${sign}${score.toFixed(3)}`
 }
 
-
-// ── MAIN ANALYZE FUNCTION ──
+// ── ANALYZE ──
 async function analyze() {
     const song   = songInput.value.trim()
     const artist = artistInput.value.trim()
@@ -224,10 +201,9 @@ async function analyze() {
     isLoading = true
 
     channelSound.currentTime = 0
-    channelSound.volume = 0.1
+    channelSound.volume      = 0.1
     channelSound.play()
 
-    // scroll down to result section
     showSection(loading)
     setTimeout(() => {
         resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -235,14 +211,13 @@ async function analyze() {
     updateLoadingText('fetching lyrics from Genius...')
 
     try {
-        // simulate loading stages for better UX
         setTimeout(() => updateLoadingText('analyzing emotions line by line...'), 2500)
-        setTimeout(() => updateLoadingText('generating your constellation...'), 6000)
+        setTimeout(() => updateLoadingText('generating your constellation...'),   6000)
 
         const response = await fetch('/analyze', {
-            method: 'POST',
+            method:  'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+            body:    JSON.stringify({
                 song_title:  song,
                 artist_name: artist
             })
@@ -257,15 +232,13 @@ async function analyze() {
             return
         }
 
-        // populate result
-        resultTitle.textContent    = data.title
-        resultArtist.textContent   = data.artist
-        scoreValue.textContent     = formatScore(data.score)
-        scoreValue.style.color     = data.score >= 0 ? '#C9A84C' : '#6EC6FF'
-        topLineText.textContent    = `"${data.top_line}"`
-        constellationImg.src       = data.image_url + '?t=' + Date.now()
+        resultTitle.textContent  = data.title
+        resultArtist.textContent = data.artist
+        scoreValue.textContent   = formatScore(data.score)
+        scoreValue.style.color   = data.score >= 0 ? '#F5E3D6' : '#A5CBD9'
+        topLineText.textContent  = `"${data.top_line}"`
+        constellationImg.src     = data.image_url + '?t=' + Date.now()
 
-        // wait for image to load then show result
         constellationImg.onload = () => {
             showSection(result)
             isLoading = false
@@ -279,22 +252,20 @@ async function analyze() {
 
     } catch (err) {
         showSection(errorBox)
-        errorMessage.textContent = 'could not connect to the server. is it running?'
+        errorMessage.textContent = 'could not connect to the server.'
         isLoading = false
     }
 }
 
-
 // ── EVENT LISTENERS ──
 searchBtn.addEventListener('click', analyze)
 
-// enter key on either input triggers search
 songInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') artistInput.focus()
 })
+
 artistInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') analyze()
 })
 
-// try another song resets everything
 tryAnother.addEventListener('click', resetToSearch)

@@ -9,40 +9,36 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <!-- ── INTRO SCREEN ── -->
-    <div class="intro-screen" id="intro-screen">
-
-        <div class="intro-content">
-            <div class="intro-channel">
-                <span>CH</span>
-                <span class="intro-channel-num">01</span>
-            </div>
-
-            <p class="intro-status" id="intro-status">
-                CLICK ANYWHERE TO BEGIN
-            </p>
-
-            <div class="intro-progress" id="intro-progress">
-                <div class="intro-progress-inner" id="intro-progress-inner"></div>
-            </div>
-
-            <p class="intro-sub" id="intro-sub">
-                ■ ■ ■ LYRIC CONSTELLATION ■ ■ ■
-            </p>
-        </div>
-
-        <p class="intro-click-hint blink" id="intro-hint">
-            [ CLICK ANYWHERE ]
-        </p>
-
+    <div id="cursor">
+        <div class="fill"></div><div></div><div></div><div></div><div></div>
+        <div></div><div class="fill"></div><div></div><div></div><div></div>
+        <div></div><div></div><div class="fill"></div><div></div><div class="fill"></div>
+        <div></div><div></div><div></div><div class="fill"></div><div></div>
+        <div></div><div></div><div class="fill"></div><div></div><div class="fill"></div>
     </div>
 
-    <!-- ── MAIN CONTENT (hidden until intro done) ── -->
-    <div class="main-content" id="main-content">
+    <!-- ── CRT SCREEN — full page, always visible ── -->
+    <div id="crt-screen">
 
-        <!-- ── HERO SECTION ── -->
+        <!-- ── INTRO OVERLAY — sits on top of everything ── -->
+        <div class="intro-overlay" id="intro-screen">
+            <div class="intro-content">
+                <div class="intro-channel">
+                    <span>CH</span>
+                    <span class="intro-channel-num">01</span>
+                </div>
+                <p class="intro-status" id="intro-status">
+                    CLICK ANYWHERE TO BEGIN
+                </p>
+                <div class="intro-progress" id="intro-progress">
+                    <div class="intro-progress-inner" id="intro-progress-inner"></div>
+                </div>
+                <p class="intro-sub">■ ■ ■ LYRIC CONSTELLATION ■ ■ ■</p>
+            </div>
+            <p class="intro-click-hint blink" id="intro-hint">[ CLICK ANYWHERE ]</p>
+        </div>
+
         <section class="hero" id="hero">
-
             <div class="hero-content">
 
                 <div class="hero-text">
@@ -55,11 +51,8 @@
                     </p>
                 </div>
 
-                <!-- search -->
                 <div class="id-card" id="id-card">
-
                     <div class="id-card-inner">
-
                         <div class="id-card-header">
                             <div class="id-card-logo">
                                 <span class="id-star">✦</span>
@@ -67,87 +60,58 @@
                             </div>
                             <div class="id-card-type">EMOTION PASS</div>
                         </div>
-
                         <div class="id-card-fields">
-
-                            <div class="id-field" id="field-song">
+                            <div class="id-field">
                                 <label class="id-label">SONG TITLE</label>
-                                <input
-                                    type="text"
-                                    id="song-input"
-                                    class="id-input"
+                                <input type="text" id="song-input" class="id-input"
                                     placeholder="enter song title"
-                                    autocomplete="off"
-                                    spellcheck="false"
-                                />
+                                    autocomplete="off" spellcheck="false"/>
                                 <div class="id-underline"></div>
                             </div>
-
-                            <div class="id-field" id="field-artist">
+                            <div class="id-field">
                                 <label class="id-label">ARTIST</label>
-                                <input
-                                    type="text"
-                                    id="artist-input"
-                                    class="id-input"
+                                <input type="text" id="artist-input" class="id-input"
                                     placeholder="enter artist name"
-                                    autocomplete="off"
-                                    spellcheck="false"
-                                />
+                                    autocomplete="off" spellcheck="false"/>
                                 <div class="id-underline"></div>
                             </div>
-
                         </div>
-
                         <div class="id-card-footer">
                             <button class="id-explore-btn" id="search-btn">
                                 <span class="btn-text">✦ explore</span>
                             </button>
                             <span class="id-hint">ENTER TO NAVIGATE BETWEEN FIELDS</span>
                         </div>
-
-                        <!-- holographic shimmer overlay -->
                         <div class="id-shimmer" id="id-shimmer"></div>
-
-                        <!-- corner constellation decoration -->
                         <div class="id-corner-constellation">
                             <svg width="80" height="80" viewBox="0 0 80 80">
-                                <circle cx="60" cy="15" r="1.5" fill="#C9A84C" opacity="0.8"/>
-                                <circle cx="45" cy="35" r="1"   fill="#C9A84C" opacity="0.6"/>
-                                <circle cx="68" cy="45" r="2"   fill="#C9A84C" opacity="0.9"/>
-                                <circle cx="35" cy="20" r="1"   fill="#C9A84C" opacity="0.5"/>
-                                <circle cx="55" cy="60" r="1.5" fill="#C9A84C" opacity="0.7"/>
-                                <line x1="60" y1="15" x2="45" y2="35" stroke="#C9A84C" stroke-width="0.4" opacity="0.3"/>
-                                <line x1="45" y1="35" x2="68" y2="45" stroke="#C9A84C" stroke-width="0.4" opacity="0.3"/>
-                                <line x1="68" y1="45" x2="55" y2="60" stroke="#C9A84C" stroke-width="0.4" opacity="0.3"/>
-                                <line x1="35" y1="20" x2="60" y2="15" stroke="#C9A84C" stroke-width="0.4" opacity="0.3"/>
+                                <circle cx="60" cy="15" r="1.5" fill="#F5E3D6" opacity="0.8"/>
+                                <circle cx="45" cy="35" r="1"   fill="#F5E3D6" opacity="0.6"/>
+                                <circle cx="68" cy="45" r="2"   fill="#F5E3D6" opacity="0.9"/>
+                                <circle cx="35" cy="20" r="1"   fill="#F5E3D6" opacity="0.5"/>
+                                <circle cx="55" cy="60" r="1.5" fill="#F5E3D6" opacity="0.7"/>
+                                <line x1="60" y1="15" x2="45" y2="35" stroke="#F5E3D6" stroke-width="0.4" opacity="0.3"/>
+                                <line x1="45" y1="35" x2="68" y2="45" stroke="#F5E3D6" stroke-width="0.4" opacity="0.3"/>
+                                <line x1="68" y1="45" x2="55" y2="60" stroke="#F5E3D6" stroke-width="0.4" opacity="0.3"/>
+                                <line x1="35" y1="20" x2="60" y2="15" stroke="#F5E3D6" stroke-width="0.4" opacity="0.3"/>
                             </svg>
                         </div>
-
                     </div>
-
                 </div>
 
             </div>
-
         </section>
 
-        <!-- ── RESULT SECTION ── -->
         <section class="result-section" id="result-section">
-
-            <!-- loading state -->
             <div class="loading" id="loading">
                 <div class="loading-stars">
                     <span>✦</span><span>✦</span><span>✦</span>
                 </div>
                 <p class="loading-text" id="loading-text">fetching lyrics...</p>
             </div>
-
-            <!-- error state -->
             <div class="error-box" id="error-box">
                 <p id="error-message">something went wrong.</p>
             </div>
-
-            <!-- result -->
             <div class="result" id="result">
                 <div class="result-meta">
                     <h2 class="result-title" id="result-title"></h2>
@@ -157,33 +121,21 @@
                         <span class="score-value" id="score-value"></span>
                     </p>
                 </div>
-
                 <div class="constellation-wrapper">
-                    <img
-                        id="constellation-img"
-                        class="constellation-img"
-                        src=""
-                        alt="constellation"
-                    />
+                    <img id="constellation-img" class="constellation-img" src="" alt="constellation"/>
                 </div>
-
                 <div class="top-line-box">
                     <p class="top-line-label">bar</p>
                     <p class="top-line-text" id="top-line-text"></p>
                 </div>
-
                 <button class="try-another" id="try-another">
                     ✦ try another song
                 </button>
             </div>
-
         </section>
 
-        <!-- ── STORY SECTION ── -->
         <section class="story-section" id="story">
-
             <div class="story-content">
-
                 <div class="story-block">
                     <span class="story-number">01</span>
                     <h3 class="story-heading">the idea</h3>
@@ -193,7 +145,6 @@
                         lyric constellation makes that invisible emotional journey visible.
                     </p>
                 </div>
-
                 <div class="story-block">
                     <span class="story-number">02</span>
                     <h3 class="story-heading">how it works</h3>
@@ -205,7 +156,6 @@
                         connected across the song's journey.
                     </p>
                 </div>
-
                 <div class="story-block">
                     <span class="story-number">03</span>
                     <h3 class="story-heading">the tech</h3>
@@ -216,12 +166,12 @@
                         no frameworks. no shortcuts.
                     </p>
                 </div>
-
             </div>
-
         </section>
 
-        <script src="/static/app.js"></script>
-    </div> <!-- end main-content -->
+    </div>
+
+    <script src="/static/crt.js"></script>
+    <script src="/static/app.js"></script>
 </body>
 </html>

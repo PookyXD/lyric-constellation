@@ -78,3 +78,31 @@ def get_album_art(song_title, artist_name):
         return art_path
     
     return None
+
+def get_song_preview(song_title, artist_name):
+    search_url = "https://itunes.apple.com/search"
+    params = {
+        "term": f"{song_title} {artist_name}",
+        "media": "music",
+        "limit": 1
+    }
+    
+    try:
+        response = requests.get(search_url, params=params, timeout=5)
+        data     = response.json()
+        
+        if data["resultCount"] == 0:
+            return None
+            
+        result      = data["results"][0]
+        preview_url = result.get("previewUrl")
+        artwork_url = result.get("artworkUrl100", "").replace("100x100", "600x600")
+        
+        return {
+            "preview_url": preview_url,
+            "artwork_url": artwork_url,
+            "track_name":  result.get("trackName"),
+            "artist_name": result.get("artistName"),
+        }
+    except Exception:
+        return None

@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+
+    <!-- sword cursor -->
     <div id="cursor">
         <div class="fill"></div><div></div><div></div><div></div><div></div>
         <div></div><div class="fill"></div><div></div><div></div><div></div>
@@ -17,37 +19,68 @@
         <div></div><div></div><div class="fill"></div><div></div><div class="fill"></div>
     </div>
 
-    <!-- ── CRT SCREEN — full page, always visible ── -->
-    <div id="crt-screen">
-
-        <!-- ── INTRO OVERLAY — sits on top of everything ── -->
-        <div class="intro-overlay" id="intro-screen">
-            <div class="intro-content">
-                <div class="intro-channel">
-                    <span>CH</span>
-                    <span class="intro-channel-num">01</span>
-                </div>
-                <p class="intro-status" id="intro-status">
-                    CLICK ANYWHERE TO BEGIN
-                </p>
-                <div class="intro-progress" id="intro-progress">
-                    <div class="intro-progress-inner" id="intro-progress-inner"></div>
-                </div>
-                <p class="intro-sub">■ ■ ■ LYRIC CONSTELLATION ■ ■ ■</p>
+    <!-- intro overlay -->
+    <div class="intro-overlay" id="intro-screen">
+        <div class="intro-content">
+            <div class="intro-channel">
+                <span>CH</span>
+                <span class="intro-channel-num">01</span>
             </div>
-            <p class="intro-click-hint blink" id="intro-hint">[ CLICK ANYWHERE ]</p>
+            <p class="intro-status" id="intro-status">CLICK ANYWHERE TO BEGIN</p>
+            <div class="intro-progress" id="intro-progress">
+                <div class="intro-progress-inner" id="intro-progress-inner"></div>
+            </div>
+            <p class="intro-sub">■ ■ ■ LYRIC CONSTELLATION ■ ■ ■</p>
         </div>
+        <p class="intro-click-hint blink" id="intro-hint">[ CLICK ANYWHERE ]</p>
+    </div>
+
+    <!-- retro player — outside crt so ScreenEffect cant touch it -->
+    <div class="player-window" id="player-window">
+        <div class="player-title-bar">
+            <span class="player-title">■ SONG PREVIEW</span>
+            <div class="player-controls-bar">
+                <button class="player-btn" id="player-close">✕</button>
+            </div>
+        </div>
+        <div class="player-menu">
+            <span>File</span>
+            <span>Playback</span>
+            <span>View</span>
+        </div>
+        <div class="player-body">
+            <div class="player-display">
+                <span class="player-track-text" id="player-track-text">no track loaded</span>
+            </div>
+            <div class="player-visualizer">
+                <canvas id="visualizer-canvas" width="320" height="55"></canvas>
+            </div>
+            <div class="player-controls">
+                <button class="player-btn player-btn--wide" id="btn-play">▶</button>
+                <button class="player-btn player-btn--wide" id="btn-stop">■</button>
+            </div>
+            <div class="player-volume">
+                <span class="player-vol-label">VOL</span>
+                <input type="range" id="volume-slider"
+                    min="0" max="1" step="0.01" value="0.3"
+                    class="player-vol-slider"/>
+            </div>
+        </div>
+    </div>
+
+    <!-- crt screen -->
+    <div id="crt-screen">
 
         <section class="hero" id="hero">
             <div class="hero-content">
-
                 <div class="hero-text">
                     <h1 class="hero-title">
                         Lyric <span class="gold">Constellation</span>
                     </h1>
                     <p class="hero-subtitle">
-                        every song has an emotional fingerprint.<br>
-                        this is yours.
+                        you've seen spotify wrapped.<br>
+                        you've seen last.fm stats.<br>
+                        but you've never seen this.
                     </p>
                 </div>
 
@@ -98,7 +131,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </section>
 
@@ -140,30 +172,41 @@
                     <span class="story-number">01</span>
                     <h3 class="story-heading">the idea</h3>
                     <p class="story-text">
-                        music carries emotion in ways words alone cannot describe.
-                        every lyric line holds a feeling — joy, sadness, anger, fear.
-                        lyric constellation makes that invisible emotional journey visible.
+                        every song carries an emotional weight.
+                        not just a vibe — a measurable arc.
+                        lines that hit different. sections that
+                        drag you down or pull you up.
+                        this turns that invisible journey
+                        into something you can actually see.
                     </p>
                 </div>
                 <div class="story-block">
                     <span class="story-number">02</span>
                     <h3 class="story-heading">how it works</h3>
                     <p class="story-text">
-                        lyrics are fetched automatically from Genius.
-                        every line runs through a transformer emotion model —
-                        the same architecture powering modern AI.
-                        each line becomes a star, sized by emotional intensity,
-                        connected across the song's journey.
+                        type any song. lyrics get pulled
+                        from Genius automatically.
+                        every single line gets scored on
+                        an emotional scale from -1.0 to +1.0.
+                        negative is dark. positive is light.
+                        each line becomes a star —
+                        the more emotional, the bigger it burns.
+                        connected across the song's journey
+                        as a constellation unique to that song.
                     </p>
                 </div>
                 <div class="story-block">
                     <span class="story-number">03</span>
-                    <h3 class="story-heading">the tech</h3>
+                    <h3 class="story-heading">the build</h3>
                     <p class="story-text">
-                        built entirely in Python — FastAPI, Matplotlib, Pillow,
-                        and the Hartmann emotion transformer model.
-                        the frontend is pure HTML, CSS and JavaScript.
-                        no frameworks. no shortcuts.
+                        python backend. genius api.
+                        transformer emotion model.
+                        matplotlib constellation generator.
+                        fastapi serving it live.
+                        pure html css js on the front.
+                        crt theme built from scratch.
+                        no shortcuts. no templates.
+                        just an idea that needed to exist.
                     </p>
                 </div>
             </div>

@@ -8,6 +8,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi import Request
 from pydantic import BaseModel
 from dotenv import load_dotenv
+from src.fetcher import get_lyrics, get_album_art, get_song_preview
 
 load_dotenv()
 
@@ -57,6 +58,8 @@ async def analyze(song_req: SongRequest):
 
         art_path = get_album_art(real_title, real_artist)
 
+        preview  = get_song_preview(real_title, real_artist)
+
         song = analyze_lyrics(real_title, real_artist, raw_lyrics)
 
         filename = plot_mood_arc(song, art_path)
@@ -75,6 +78,8 @@ async def analyze(song_req: SongRequest):
                 song.lines,
                 key=lambda l: abs(l.compound)
             ).text,
+            "preview_url": preview["preview_url"] if preview else None,
+            "track_name":  preview["track_name"]  if preview else real_title,
         })
 
     except Exception as e:

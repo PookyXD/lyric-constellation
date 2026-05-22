@@ -135,6 +135,8 @@ canvas.snow {
 .intro-overlay {
     position: fixed;
     inset: 0;
+    width: 100vw;
+    height: 100vh;
     background: var(--bg);
     z-index: 9997;
     display: flex;
@@ -142,6 +144,7 @@ canvas.snow {
     align-items: center;
     justify-content: center;
     gap: 3rem;
+    overflow: hidden;
 }
 
 .intro-content {
@@ -768,3 +771,167 @@ canvas.snow {
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+/* ── RETRO PLAYER WINDOW ── */
+.player-window {
+    display: none;
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 360px;
+    z-index: 9996;
+    background: var(--bg-elevated);
+    box-shadow:
+        3px  0px var(--cream),
+        0px  3px var(--cream),
+       -3px  0px var(--text-dim),
+        0px -3px var(--text-dim),
+        4px 4px 0 rgba(0,0,0,0.5);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.5rem;
+}
+
+.player-window.visible {
+    display: block;
+}
+
+.player-title-bar {
+    background: var(--blue-accent);
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.player-title {
+    color: var(--bg);
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+}
+
+.player-controls-bar {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.player-menu {
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.45rem;
+}
+
+.player-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 4px;
+    box-shadow:
+        3px  0px var(--cream),
+        0px  3px var(--cream),
+       -3px  0px var(--text-dim),
+        0px -3px var(--text-dim);
+}
+
+.player-display {
+    background: #000;
+    padding: 0.5rem;
+    overflow: hidden;
+    border-top:  3px solid var(--blue-accent);
+    border-left: 3px solid var(--blue-accent);
+    box-shadow: 2px 2px var(--cream);
+    white-space: nowrap;
+}
+
+.player-track-text {
+    display: inline-block;
+    color: var(--cream);
+    font-size: 0.45rem;
+    letter-spacing: 0.05em;
+    animation: marquee 15s linear infinite;
+    text-shadow: 0 0 6px var(--cream);
+}
+
+@keyframes marquee {
+    0%   { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* ── VISUALIZER ── */
+#visualizer-canvas {
+    width: 100%;
+    height: 60px;
+    display: block;
+    background: #000;
+    border-top:  2px solid var(--blue-accent);
+    border-left: 2px solid var(--blue-accent);
+}
+
+/* ── PLAYER BUTTONS ── */
+.player-btn {
+    background: var(--bg-elevated);
+    color: var(--cream);
+    border: none;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.5rem;
+    padding: 0.4rem 0.5rem;
+    cursor: none;
+    box-shadow:
+       -2px  0px var(--cream),
+        0px -2px var(--cream),
+        2px  0px var(--text-dim),
+        0px  2px var(--text-dim);
+    transition: transform 0.1s;
+}
+
+.player-btn:active {
+    transform: scale(0.95);
+    box-shadow:
+        2px  0px var(--cream),
+        0px  2px var(--cream),
+       -2px  0px var(--text-dim),
+        0px -2px var(--text-dim);
+}
+
+.player-btn--wide {
+    padding: 0.5rem 0.75rem;
+    flex: 1;
+}
+
+.player-controls {
+    display: flex;
+    gap: 0.4rem;
+}
+
+/* ── VOLUME ── */
+.player-volume {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.player-vol-label {
+    color: var(--text-dim);
+    font-size: 0.4rem;
+    letter-spacing: 0.15em;
+}
+
+.player-vol-slider {
+    flex: 1;
+    appearance: none;
+    height: 4px;
+    background: var(--border);
+    outline: none;
+    cursor: none;
+}
+
+.player-vol-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--cream);
+    box-shadow: 0 0 6px var(--cream);
+}

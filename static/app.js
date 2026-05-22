@@ -88,11 +88,11 @@ function setupAudioGraph(audioEl) {
 
     // low pass — cuts highs like old speaker
     lowPassFilter.type            = 'lowpass'
-    lowPassFilter.frequency.value = 3500
+    lowPassFilter.frequency.value = 2500
     lowPassFilter.Q.value         = 0.8
 
     analyserNode.fftSize = 128
-    gainNode.gain.value  = parseFloat(volumeSlider.value)
+    gainNode.gain.value  = 0.15
 
     // chain: source → distortion → lowpass → gain → analyser → out
     sourceNode.connect(distortionNode)

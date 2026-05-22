@@ -209,6 +209,6 @@ window.addEventListener('DOMContentLoaded', () => {
             blur:  0.5
         })
         .add('snow', {
-            opacity: 0.05
+            opacity: 0.1
         })
 })

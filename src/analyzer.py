@@ -1,61 +1,38 @@
 import re
 import csv
 import os
-from transformers import pipeline
+import nltk
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from src.models import LyricLine, Song
 from rich.console import Console
 
 _console = Console()
-_console.print("[grey50]Loading emotion model...[/]")
-sentiment_pipeline = pipeline(
-    "text-classification",
-    model="j-hartmann/emotion-english-distilroberta-base",
-    top_k=1,
-)
-_console.print("[green3]Model ready.[/]\n")
 
-
-
-EMOTION_SCORES = {
-    "joy":      1.0,
-    "surprise": 0.5,
-    "neutral":  0.0,
-    "fear":    -0.4,
-    "sadness": -0.7,
-    "disgust": -0.8,
-    "anger":   -1.0,
-}
+nltk.download('vader_lexicon', quiet=True)
+sia = SentimentIntensityAnalyzer()
 
 
 def clean_lyrics(raw_lyrics):
-    lines = raw_lyrics.split("\n")
-
+    lines   = raw_lyrics.split("\n")
     cleaned = []
     for line in lines:
         line = line.strip()
         if line == "":
             continue
         cleaned.append(line)
-
     return cleaned
 
 
 def extract_sections(cleaned_lines):
-    sections = []
+    sections        = []
     current_section = "Intro"
-
     for line in cleaned_lines:
         if re.match(r'^\[.+\]$', line):
             current_section = line.strip("[]")
             continue
         sections.append((line, current_section))
-
     return sections
 
-
-def score_to_compound(label, score):
-    base = EMOTION_SCORES.get(label.lower(), 0.0)
-    return round(base * score, 4)
 
 def analyze_lyrics(song_title, artist_name, raw_lyrics):
     cleaned  = clean_lyrics(raw_lyrics)
@@ -63,28 +40,20 @@ def analyze_lyrics(song_title, artist_name, raw_lyrics):
 
     song = Song(song_title, artist_name)
 
-    lines_text = [line for line, _ in sections]
-    labels_sec = [sec  for _, sec  in sections]
+    for line, section in sections:
+        scores   = sia.polarity_scores(line)
+        compound = round(scores["compound"], 4)
 
-    # run all lines through model in one batch
-    results = sentiment_pipeline(
-        lines_text,
-        truncation=True,
-        max_length=128,
-        batch_size=16,
-    )
-
-    for i, result in enumerate(results):
-        label    = result[0]["label"]
-        score    = result[0]["score"]
-        compound = score_to_compound(label, score)
-
-        lyric_line = LyricLine(lines_text[i], labels_sec[i])
-        lyric_line.emotion = label.lower()
-        lyric_line.compound  = compound
-        lyric_line.positive = score if label in ["joy", "surprise"] else 0.0
-        lyric_line.negative = score if label in ["anger", "sadness", "disgust", "fear"] else 0.0
-        lyric_line.neutral  = score if label == "neutral" else 0.0
+        lyric_line          = LyricLine(line, section)
+        lyric_line.compound = compound
+        lyric_line.positive = scores["pos"]
+        lyric_line.negative = scores["neg"]
+        lyric_line.neutral  = scores["neu"]
+        lyric_line.emotion  = (
+            "positive" if compound > 0.05
+            else "negative" if compound < -0.05
+            else "neutral"
+        )
 
         song.add_line(lyric_line)
 

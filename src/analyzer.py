@@ -9,7 +9,7 @@ _console = Console()
 _console.print("[grey50]Loading emotion model...[/]")
 sentiment_pipeline = pipeline(
     "text-classification",
-    model="models/emotions",
+    model="j-hartmann/emotion-english-distilroberta-base",
     top_k=1,
 )
 _console.print("[green3]Model ready.[/]\n")

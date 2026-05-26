@@ -27,7 +27,7 @@ Every song produces a completely different constellation.
 
 ## Demo
 
-[![Lyric Constellation Demo](https://img.youtube.com/vi/YR7M9aOXv2M/maxresdefault.jpg)]([https://www.youtube.com/watch?v=YR7M9aOXv2M])
+Lyric Constellation Project Demo: https://www.youtube.com/watch?v=YR7M9aOXv2M
 
 ---
 

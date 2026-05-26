@@ -1,5 +1,7 @@
 # ✦ Lyric Constellation
 
+<img width="1318" height="840" alt="image" src="https://github.com/user-attachments/assets/6bcf3c9e-67b8-4b2d-a37e-2884d7fc86eb" />
+
 > every song has an emotional fingerprint. this is yours.
 
 ![Python](https://img.shields.io/badge/Python-3.11-gold?style=flat-square)
@@ -25,7 +27,7 @@ Every song produces a completely different constellation.
 
 ## Demo
 
-
+<video src="https://youtu.be/YR7M9aOXv2M" controls width="100%"></video>
 
 ---
 

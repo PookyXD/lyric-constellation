@@ -62,6 +62,10 @@ async def analyze(song_req: SongRequest):
 
         song = analyze_lyrics(real_title, real_artist, raw_lyrics)
 
+        import re
+
+        real_title  = re.sub(r'[<>:"/\\|?*]', '', real_title).strip()
+        real_artist = re.sub(r'[<>:"/\\|?*]', '', real_artist).strip()
         filename = plot_mood_arc(song, art_path)
 
         unique_name = f"output/{uuid.uuid4()}.png"
